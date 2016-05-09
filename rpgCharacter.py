@@ -38,18 +38,18 @@ class RPGCharacter(object):
         statList = []
         while len(statList) < 6:
             if statType == "Minion":
-                stat = random.randrange(1, 6) + random.randrange(1, 6) + random.randrange(1, 6)
+                stat = random.randrange(2, 6) + random.randrange(2, 6) + random.randrange(2, 6)
             elif statType == "Normal":
                 statArray = []
-                statArray.append(random.randrange(1, 6))
-                statArray.append(random.randrange(1, 6))
-                statArray.append(random.randrange(1, 6))
-                statArray.append(random.randrange(1, 6))
+                statArray.append(random.randrange(2, 6))
+                statArray.append(random.randrange(2, 6))
+                statArray.append(random.randrange(2, 6))
+                statArray.append(random.randrange(2, 6))
                 statArray.sort(cmp=None, key=None, reverse=False)
                 #statArray = sorted(random.randrange(1, 6), random.randrange(1, 6), random.randrange(1, 6), random.randrange(1, 6))
                 stat = statArray.pop() + statArray.pop() + statArray.pop()
             elif statType == "Mighty":
-                statArray = sorted([random.randrange(1, 6), random.randrange(1, 6), random.randrange(1, 6)])
+                statArray = sorted([random.randrange(2, 6), random.randrange(2, 6), random.randrange(2, 6)])
                 stat = statArray.pop() + statArray.pop() + 6
             statList.append(stat)
         statList.sort()
@@ -67,8 +67,6 @@ class RPGCharacter(object):
         x = 0
         y = len(featArray)
         self.featSequence = []
-        
-        
 
         while x < len(featArray):
             self.featSequence.append(featArray[x])

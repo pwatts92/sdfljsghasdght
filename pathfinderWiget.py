@@ -18,9 +18,7 @@ class BasicWidget(QtGui.QWidget):
         self.h_layout = QHBoxLayout()
         self.setStyleSheet('font-size: 14pt; font-family: Times;')
         self.setGeometry(0, 0, 1000, 1000)
-        #self.statusBar()
-        #self.center()
-                
+    
         # Set Window text and wigets
         classLabel = QtGui.QLabel("Class", self)
         self.classBox = QtGui.QComboBox(self)
@@ -70,6 +68,43 @@ class BasicWidget(QtGui.QWidget):
         self.chaBox = QtGui.QTextEdit(self)
         self.chaBox.move(75, 350)
         
+        self.nameCLabel = QtGui.QLabel("Class", self)
+        self.nameCLabel.move(220, 100)
+        self.nameCBox = QtGui.QTextEdit(self)
+        self.nameCBox.move(200, 130)
+        
+        self.attackLabel = QtGui.QLabel("Attack Bonus", self)
+        self.attackLabel.move(200, 170)
+        self.attackBox = QtGui.QTextEdit(self)
+        self.attackBox.move(200, 200)
+        
+        self.refLabel = QtGui.QLabel("Reflex Save", self)
+        self.refLabel.move(350, 100)
+        self.refBox = QtGui.QTextEdit(self)
+        self.refBox.move(350, 130)
+        
+        self.fortLabel = QtGui.QLabel("Fortitude Save", self)
+        self.fortLabel.move(350, 170)
+        self.fortBox = QtGui.QTextEdit(self)
+        self.fortBox.move(350, 200)
+        
+        self.willLabel = QtGui.QLabel("Will Save", self)
+        self.willLabel.move(350, 230)
+        self.willBox = QtGui.QTextEdit(self)
+        self.willBox.move(350, 260)
+        
+        self.weaponLabel = QtGui.QLabel("Weapon", self)
+        self.weaponLabel.move(250, 300)
+        self.weaponBox = QtGui.QTextEdit(self)
+        self.weaponBox.resize(300, 40)
+        self.weaponBox.move(250, 330)
+        
+        self.featLabel = QtGui.QLabel("Feats", self)
+        self.featLabel.move(600, 100)
+        self.featBox = QtGui.QTextEdit(self)
+        self.featBox.resize(300, 250)
+        self.featBox.move(600, 130)
+        
         genButton = QtGui.QPushButton("Generate Character", self)
         genButton.clicked.connect(lambda: self.generateCharacter())
         genButton.resize(genButton.minimumSizeHint())
@@ -84,7 +119,7 @@ class BasicWidget(QtGui.QWidget):
     
         self.setPalette(palette)
         self.setLayout(mainLayout)
-        self.setWindowTitle("Pathfinder Character Generator")
+        self.setWindowTitle("RPG Character Generator")
         
     def generateCharacter(self):
         #classText = self.classBox.currentText()
@@ -92,48 +127,85 @@ class BasicWidget(QtGui.QWidget):
             randomInt = random.randrange(1, 5)
             if(randomInt == 1):
                 character = RPGCharacter(Fighter(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Fighter")
             elif(randomInt == 2):
                 character = RPGCharacter(Rogue(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Rogue")
             elif(randomInt == 3):
                 character = RPGCharacter(Ranger(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Ranger")
             elif(randomInt == 4):
                 character = RPGCharacter(Wizard(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Wizard")
             else:
                 character = RPGCharacter(Cleric(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Cleric")
         elif (self.classBox.currentText() == "Random Warrior"):
             randomInt = random.randrange(1, 3)
             if(randomInt == 1):
                 character = RPGCharacter(Fighter(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Fighter")
             elif(randomInt == 2):
                 character = RPGCharacter(Rogue(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Rogue")
             elif(randomInt == 3):
                 character = RPGCharacter(Ranger(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Ranger")
         elif (self.classBox.currentText() == "Random Spellcaster"):
             randomInt = random.randrange(1, 2)
             if(randomInt == 1):
                 character = RPGCharacter(Wizard(), int(self.levelBox.currentIndex()))
+                self.nameCBox.setText("Wizard")
             else:
                 character = RPGCharacter(Cleric(), int(self.levelBox.currentIndex()))
         elif (self.classBox.currentText() == "Fighter"):
             character = RPGCharacter(Fighter(), int(self.levelBox.currentIndex()))
+            self.nameCBox.setText("Fighter")
         elif (self.classBox.currentText() == "Rogue"):
             character = RPGCharacter(Rogue(), int(self.levelBox.currentIndex()))
+            self.nameCBox.setText("Rogue")
         elif (self.classBox.currentText() == "Ranger"):
             character = RPGCharacter(Ranger(), int(self.levelBox.currentIndex()))
+            self.nameCBox.setText("Ranger")
         elif (self.classBox.currentText() == "Wizard"):
             character = RPGCharacter(Wizard(), int(self.levelBox.currentIndex()))
+            self.nameCBox.setText("Wizard")
         else:
             character = RPGCharacter(Cleric(), int(self.levelBox.currentIndex()))
+            self.nameCBox.setText("Cleric")
 
         character.generateStats(self.statGenBox.currentText())
         charStats = character.stats
         character.selectWeapon()
-        character.genFeats()
+        featSet = character.genFeats()
+    
+        self.strBox.setText(str(charStats[0]))
+        self.dexBox.setText(str(charStats[1]))
+        self.conBox.setText(str(charStats[2]))
+        self.intBox.setText(str(charStats[3]))
+        self.wisBox.setText(str(charStats[4]))
+        self.chaBox.setText(str(charStats[5]))
         
-        #print("Test")
-        self.strBox.setText(str(charStats[1]))
-        #self.statusBar().showMessage('Character Generated')
+        self.attackBox.setText(str(character.RPGClass.attackBonus(character.level) + ((charStats[0]-10)/2) + ((charStats[1]-10)/2) ))
+        if(character.RPGClass.saveArray[0] == 0):
+            self.refBox.setText(str((charStats[1]-10)/2 + self.levelBox.currentIndex() / 2))
+        else:
+            self.refBox.setText(str((charStats[1]-10)/2 + self.levelBox.currentIndex() + 2))
+        if(character.RPGClass.saveArray[1] == 0):
+            self.fortBox.setText(str((charStats[2]-10)/2 + self.levelBox.currentIndex() / 2))
+        else:
+            self.fortBox.setText(str((charStats[2]-10)/2 + self.levelBox.currentIndex() + 2))
+        if(character.RPGClass.saveArray[2] == 0):
+            self.willBox.setText(str((charStats[4]-10)/2 + self.levelBox.currentIndex() / 2))
+        else:
+            self.willBox.setText(str((charStats[4]-10)/2 + self.levelBox.currentIndex() + 2))   
         
+        #weaponStr = character.weapon.weaponName + ", " + character.weapon.weaponDamage + "+" + str(((charStats[0]-10)/2) + ((charStats[1]-10)/2)) + ", " + character.weapon.weaponCrit)
+        weaponStr = character.weapon.weaponName + ", " + character.weapon.weaponDamage + "+" + str((charStats[0]-10)/2 + ((charStats[1]-10)/2)) + ", " + character.weapon.weaponCrit
+        self.weaponBox.setText(weaponStr)
+        
+        #for i < len(featSet):
+            
         
 if __name__ == '__main__':
     import sys

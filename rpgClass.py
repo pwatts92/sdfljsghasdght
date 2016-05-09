@@ -5,6 +5,7 @@ Created on Apr 28, 2016
 '''
 
 import random
+from Main.FeatGenerator import *
 
 class RPGClass():
 
@@ -34,7 +35,7 @@ class RPGClass():
         
     def attackBonus(self, level):
         self.level = level
-        return self.bab * level
+        return (self.bab+1) * level
     
     def saves(self):
         return self.saveArray
@@ -43,11 +44,13 @@ class RPGClass():
         return self.statPriorities
     
     def featProgression(self, level):
+        self.genEngine = FeatSelector()
+        featIter = iter(self.genEngine.featSet(self.fightingStyle))
         self.level = level
         self.featArray = []
         for x in range (0, self.level):
             if x%2 == 1:
-                self.featArray.append(x)
+                self.featArray.append(featIter.next)
         return self.featArray
         
 
@@ -81,11 +84,12 @@ class Fighter(RPGClass):
         self.weaponProficiency = self.Martial
         
     def featProgression(self, level):
+        self.genEngine = FeatSelector()
+        featIter = iter(self.genEngine.featSet(self.fightingStyle))
         self.level = level
         self.featArray = []
-        self.featArray.append(1)
         for x in range (1, self.level):
-            self.featArray.append(x)
+            self.featArray.append(featIter.next)
         return self.featArray
             
             
@@ -150,11 +154,13 @@ class Ranger(RPGClass):
         self.weaponProficiency = self.Martial
         
     def featProgression(self, level):
+        self.genEngine = FeatSelector()
+        featIter = iter(self.genEngine.featSet(self.fightingStyle))
         self.level = level
         self.featArray = []
         for x in range (0, self.level):
             if x%2 == 1 or (x-2)%4 == 0:
-                self.featArray.append(x)
+                self.featArray.append(featIter.next)
         return self.featArray
                 
 class Cleric(RPGClass):
@@ -208,10 +214,12 @@ class Wizard(RPGClass):
         self.weaponProficiency = self.Simple
         
     def featProgression(self, level):
+        self.genEngine = FeatSelector()
+        featIter = iter(self.genEngine.featSet(self.fightingStyle))
         self.level = level
         self.featArray = []
         for x in range (0, self.level):
             if x%2 == 1 or x%5 == 0:
-                self.featArray.append(x)
+                self.featArray.append(featIter.next)
         return self.featArray
                 

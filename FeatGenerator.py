@@ -13,25 +13,33 @@ class FeatSelector(object):
         self.feats = []
         
         #Needs to be filled
-        self.feat.append(Feat("Weapon Focus", 1, 1, 1, 0).requirement(1, 0, 0 , 0 , 0 , 0 , 0 , 0, []))
-        self.feat.append(Feat("Spell Focus", 0, 0, 0, 1).requirement(0, 1, 0 , 0 , 0 , 0 , 0 , 0, []))
-        self.feat.append(Feat("Dodge", 0, 1, 0.5, 0).requirement(0, 0, 0 , 13, 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Weapon Focus", 1, 1, 1, 0).requirement(1, 0, 0 , 0 , 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Spell Focus", 0, 0, 0, 1).requirement(0, 1, 0 , 0 , 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Dodge", 0, 1, 0.5, 0).requirement(0, 0, 0 , 13, 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Point-Blank Shot", 0, 0, 1, 0).requirement(0, 0, 0 , 13, 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Precise Shot", 0, 0, 1, 0).requirement(0, 0, 0 , 13, 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Toughness", 1, 1, 0, 0).requirement(0, 0, 0 , 13, 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Improved Initiative", 0.5, 1, 1, 1).requirement(0, 0, 0 , 0 , 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Improved Trip", 1, 1, 0, 0).requirement(1, 0, 0 , 0 , 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Improved Disarm", 1, 1, 0, 0).requirement(1, 0, 0 , 0 , 0 , 0 , 0 , 0, []))
+        self.feats.append(Feat("Improved Feint", 0.5, 1, 0, 0).requirement(1, 0, 0 , 0 , 0 , 0 , 0 , 0, []))
+
         
     def featSet(self, priority):
         Heavy = 1
         Light = 2
         Ranged = 3
-        
+        '''
         if(priority == Heavy):
-            self.feats.sort(cmp=self.heavPriority, key=None, reverse=False)
+            self.feats.sort(key=lambda feat: feat.heavPriority)
         elif(priority == Light):
-            self.feats.sort(cmp=self.lightPriority, key=None, reverse=False)
+            self.feats.sort(key=lambda Feat: Feat.lightPriority)
         elif(priority == Ranged):
-            self.feats.sort(cmp=self.rangedPriority, key=None, reverse=False)
+            self.feats.sort(key=lambda Feat: Feat.rangePriority)
         else:
-            self.feats.sort(cmp=self.magePriority, key=None, reverse=False)
-            
-        return self.feats
+            self.feats.sort(key=lambda Feat: Feat.magePriority)
+            '''
+        return sorted(self.feats)
     
     
     
@@ -42,6 +50,9 @@ class Feat(object):
         self.lightPriority = lightPriority
         self.rangePriority = rangePriority 
         self.magePriority = magePriority
+        
+    def __repr__(self, *args, **kwargs):
+        return repr((self.heavPriority, self.lightPriority, self.rangePriority, self.magePriority))
         
     def requirement(self, BAB, CL, STR, DEX, CON, INT, WIS, CHA, feats):
         self.BAB = BAB
